@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mandala floral</title>
+<title>Sonríe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
 <canvas id="c"></canvas>
 <div class="overlay" id="overlay">
   <p>Florece donde Dios te plantó.</p>
-  <button id="regen">generar otra</button>
+  <button id="regen">Renueva</button>
 </div>
 <div class="seed" id="seedTag"></div>
 
@@ -163,22 +163,29 @@ function buildProgram(seed){
    ----------------------------------------------------------------*/
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
-let scale = 1, dpr = Math.min(window.devicePixelRatio,2);
+let scale = 1, dpr = Math.min(window.devicePixelRatio,2), offsetY = 0;
 
 function resize(){
   const w = window.innerWidth, h = window.innerHeight;
   canvas.width = w*dpr; canvas.height = h*dpr;
   canvas.style.width = w+'px'; canvas.style.height = h+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  //scale = Math.min(w,h)/480;
-  scale = Math.max(0.1, (Math.min(w,h) - 120)) / 480;
+
+  const reserved = 92; // espacio reservado para el texto, solo en pantallas anchas/bajas
+  let heff = h;
+  offsetY = 0;
+  if(h <= w){
+    heff = h - reserved;
+    offsetY = -reserved/2;
+  }
+  scale = Math.min(w, heff) / 480;
 }
 resize();
 
 let patternCenter = {x:0, y:0};
 function toScreen(x,y){
   const w = canvas.width/dpr, h = canvas.height/dpr;
-  return [w/2 + (x-patternCenter.x)*scale, h/2 - (y-patternCenter.y)*scale];
+  return [w/2 + (x-patternCenter.x)*scale, h/2 + offsetY - (y-patternCenter.y)*scale];
 }
 
 let program = null, revealed = 0, startTime = 0, rafId = null;
