@@ -28,14 +28,16 @@
     transition:color .25s ease, border-color .25s ease; }
   .overlay button:hover{ color:#fff; border-color:rgba(245,166,35,.85); }
   .seed{ position:fixed; left:16px; bottom:14px; z-index:2;
-    font-family:"IBM Plex Mono",monospace; font-size:.6rem; color:rgba(255,255,255,.2); }
+    font-family:"IBM Plex Mono",monospace; font-size:.6rem; color:rgba(255,255,255,.2); 
+    display: none;   
+    }
 </style>
 </head>
 <body>
 
 <canvas id="c"></canvas>
 <div class="overlay" id="overlay">
-  <p>una flor, trazada en vivo</p>
+  <p>Florece donde Dios te plantó.</p>
   <button id="regen">generar otra</button>
 </div>
 <div class="seed" id="seedTag"></div>
@@ -168,7 +170,8 @@ function resize(){
   canvas.width = w*dpr; canvas.height = h*dpr;
   canvas.style.width = w+'px'; canvas.style.height = h+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  scale = Math.min(w,h)/480;
+  //scale = Math.min(w,h)/480;
+  scale = Math.max(0.1, (Math.min(w,h) - 120)) / 480;
 }
 resize();
 
